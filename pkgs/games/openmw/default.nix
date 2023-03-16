@@ -2,6 +2,7 @@
 , stdenv
 , mkDerivation
 , fetchFromGitHub
+, fetchFromGitLab
 , fetchpatch
 , cmake
 , pkg-config
@@ -18,6 +19,10 @@
 , lz4
 , recastnavigation
 , VideoDecodeAcceleration
+, libyamlcpp
+, luajit
+, CoreMedia
+, VideoToolbox
 }:
 
 let
@@ -26,10 +31,10 @@ let
       src = fetchFromGitHub {
         owner = "OpenMW";
         repo = "osg";
-        rev = "bbe61c3bc510a4f5bb4aea21cce506519c2d24e6";
-        sha256 = "sha256-t3smLqstp7wWfi9HXJoBCek+3acqt/ySBYF8RJOG6Mo=";
+        rev = "69cfecebfb6dc703b42e8de39eed750a84a87489";
+        sha256 = "sha256-gq8P1DGRzo+D96++yivb+YRjdneSNZC03h9VOp+YXuE=";
       };
-      patches = [
+      patches = (self.patches or []) ++ [
         (fetchpatch {
           # For Darwin, OSG doesn't build some plugins as they're redundant with QuickTime.
           # OpenMW doesn't like this, and expects them to be there. Apply their patch for it.
@@ -55,28 +60,34 @@ let
     ];
   });
 
+  # FIXME: Update actual MyGUI package to 3.4.1.
+  # Issues: https://github.com/NixOS/nixpkgs/pull/182905
+  #   * Breaks ogre 1.9
+  #   * Updates to ogre 1.12 cause build issues elsewhere
+  mygui_openmw = mygui.overrideAttrs (old: rec {
+    version = "3.4.1";
+    src = fetchFromGitHub {
+      owner = "MyGUI";
+      repo = "mygui";
+      rev = "MyGUI${version}";
+      sha256 = "sha256-5u9whibYKPj8tCuhdLOhL4nDisbFAB0NxxdjU/8izb8=";
+    };
+  });
+
 in
 mkDerivation rec {
   pname = "openmw";
-  version = "0.47.0";
+  version = "48-rc8";
 
-  src = fetchFromGitHub {
+  # FIXME: Go back to GitHub source when 0.48.0 is released
+  src = fetchFromGitLab {
     owner = "OpenMW";
     repo = "openmw";
     rev = "${pname}-${version}";
-    sha256 = "sha256-Xq9hDUTCQr79Zzjk0CsiXclVTHK6nrSowukIQqVdrKY=";
+    sha256 = "sha256-CORUaxfMe2Itk3wYyBX++t4rHYt81wpraJQt7uGRWus=";
   };
 
-  patches = [
-    (fetchpatch {
-      url = "https://gitlab.com/OpenMW/openmw/-/merge_requests/1239.diff";
-      sha256 = "sha256-RhbIGeE6GyqnipisiMTwWjcFnIiR055hUPL8IkjPgZw=";
-    })
-  ];
-
-  postPatch = ''
-    sed '1i#include <memory>' -i components/myguiplatform/myguidatamanager.cpp # gcc12
-  '' + lib.optionalString stdenv.isDarwin ''
+  postPatch = lib.optionalString stdenv.isDarwin ''
     # Don't fix Darwin app bundle
     sed -i '/fixup_bundle/d' CMakeLists.txt
   '';
@@ -92,14 +103,18 @@ mkDerivation rec {
     bullet_openmw
     ffmpeg
     libXt
-    mygui
+    mygui_openmw
     openal
     openscenegraph_openmw
     unshield
     lz4
     recastnavigation
+    libyamlcpp
+    luajit
   ] ++ lib.optionals stdenv.isDarwin [
     VideoDecodeAcceleration
+    CoreMedia
+    VideoToolbox
   ];
 
   cmakeFlags = [
