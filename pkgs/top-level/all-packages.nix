@@ -36003,7 +36003,7 @@ with pkgs;
   openloco = pkgsi686Linux.callPackage ../games/openloco { };
 
   openmw = libsForQt5.callPackage ../games/openmw {
-    inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration;
+    inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration CoreMedia VideoToolbox;
   };
 
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
