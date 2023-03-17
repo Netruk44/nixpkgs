@@ -59,6 +59,8 @@ rec {
   # a fork of luarocks used to generate nix lua derivations from rockspecs
   luarocks-nix = callPackage ../development/tools/misc/luarocks/luarocks-nix.nix { };
 
+ luaipc = callPackage ../development/lua-modules/luaipc { };
+
  lua-resty-core = callPackage ({ fetchFromGitHub }: buildLuaPackage rec {
     pname = "lua-resty-core";
     version = "0.1.24";
