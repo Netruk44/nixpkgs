@@ -1,6 +1,7 @@
 { lib
 , stdenv
 , mkDerivation
+, fetchgit
 , fetchFromGitHub
 , fetchFromGitLab
 , fetchpatch
@@ -23,6 +24,7 @@
 , luajit
 , CoreMedia
 , VideoToolbox
+, source ? null
 }:
 
 let
@@ -73,14 +75,13 @@ let
       sha256 = "sha256-5u9whibYKPj8tCuhdLOhL4nDisbFAB0NxxdjU/8izb8=";
     };
   });
-
 in
 mkDerivation rec {
   pname = "openmw";
   version = "48-rc8";
 
   # FIXME: Go back to GitHub source when 0.48.0 is released
-  src = fetchFromGitLab {
+  src = if source != null then source else fetchFromGitLab {
     owner = "OpenMW";
     repo = "openmw";
     rev = "${pname}-${version}";

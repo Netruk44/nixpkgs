@@ -36006,6 +36006,10 @@ with pkgs;
     inherit (darwin.apple_sdk.frameworks) VideoDecodeAcceleration CoreMedia VideoToolbox;
   };
 
+  openmw-modded = libsForQt5.callPackage ../games/openmw/modded.nix { };
+  
+  openmw-mod-something-else = libsForQt5.callPackage ../games/openmw/mods/something-else.nix { };
+
   openmw-tes3mp = libsForQt5.callPackage ../games/openmw/tes3mp.nix { };
 
   opensoldat = callPackage ../games/opensoldat { };
