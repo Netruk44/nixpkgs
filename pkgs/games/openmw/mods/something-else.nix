@@ -17,8 +17,8 @@ let
     source = fetchFromGitLab {
       owner = "Netruk44";
       repo = "openmw";
-      rev = "something-else-mod-v0.3d";
-      sha256 = "sha256-OEImNAu7Bc38oZTZYkyI1q9HzaKRbRn85+DOUjwde6Y=";
+      rev = "something-else-mod-v0.3e";
+      sha256 = "sha256-mSl9p96Fd2OVO0E9Q0DEquYS8R/2mJUb4UsmqFrSIVg=";
     };
   };
   #openmw-modded_somethingelse = openmw-modded.override {
