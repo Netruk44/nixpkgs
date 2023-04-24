@@ -17,8 +17,8 @@ let
     source = fetchFromGitLab {
       owner = "Netruk44";
       repo = "openmw";
-      rev = "something-else-mod-v0.4";
-      sha256 = "sha256-wXgpUwh7LJnEXq/H3/9vzoAvU82Vv/R1faJXJLR58xw=";
+      rev = "something-else-mod-v0.5";
+      sha256 = "sha256-0pkg3GmzT5I1bR9McylasiBzmwC3UGL33ZiraIULChU=";
     };
   };
   #openmw-modded_somethingelse = openmw-modded.override {
@@ -39,8 +39,8 @@ let
 
   mlInterfaceRepository = fetchgit {
     url = "https://github.com/Netruk44/ml-interface";
-    rev = "v0.5b";
-    sha256 = "sha256-VqdoNnYFiW+KzqGFnXAaF7sBI5c2pDKtoxKhtciJL7M=";
+    rev = "v0.6";
+    sha256 = "sha256-v7TldmEapcga7Oel8my1yKrA0rPDad9ILoJoi7RrPQw=";
   };
 
   # Create a script that runs the ml interface script with all arguments
